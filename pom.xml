@@ -1,60 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Preserve existing coordinates so artifact name and packaging remain the same -->
     <groupId>com.example</groupId>
     <artifactId>sample-fake-java</artifactId>
-    <version>1.0.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
     <name>sample-fake-java</name>
-    <description>Legacy-style Servlet/JSP library management application (demo fixture) intended for a
-        Framework upgrade modernization plan targeting Spring Boot.</description>
+
+    <!-- Align with Spring Boot 3.2 dependency management while keeping the existing servlet-based design -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Spring Boot 3.x requires Java 17+ -->
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
+        <!-- Jakarta Servlet API compatible with Spring Boot 3.2 (Jakarta EE 10 / Servlet 6) -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- JSTL API and implementation in the Jakarta namespace -->
         <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-            <version>1.2.1</version>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.web</groupId>
-            <artifactId>javax.servlet.jsp.jstl</artifactId>
-            <version>1.2.5</version>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
         </dependency>
+
+        <!-- H2 database; use a version compatible with modern Spring Boot baselines -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <version>2.2.224</version>
+            <scope>runtime</scope>
         </dependency>
+
+        <!-- JUnit 4 for existing tests; Spring Boot 3 supports JUnit 4 via the vintage engine if needed -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Optional: basic Spring Boot web starter for embedded container support if desired by the runtime
+             (does not change existing servlet-based code, but ensures alignment with Boot 3.2 if used). -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>sample-fake-java</finalName>
         <plugins>
+            <!-- Use Spring Boot's plugin to align with the 3.2 toolchain without changing artifact coordinates -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Ensure compilation with the configured Java language level -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
