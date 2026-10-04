@@ -1,37 +1,45 @@
 package com.example.library.model;
 
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-public class Member implements Serializable {
-    private int id;
-    private String fullName;
+@Entity
+@Table(name = "members")
+public class Member {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
     private String email;
-    private String membershipLevel;
 
     public Member() {
     }
 
-    public Member(int id, String fullName, String email, String membershipLevel) {
-        this.id = id;
-        this.fullName = fullName;
+    public Member(String name, String email) {
+        this.name = name;
         this.email = email;
-        this.membershipLevel = membershipLevel;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -40,13 +48,5 @@ public class Member implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getMembershipLevel() {
-        return membershipLevel;
-    }
-
-    public void setMembershipLevel(String membershipLevel) {
-        this.membershipLevel = membershipLevel;
     }
 }

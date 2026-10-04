@@ -1,50 +1,66 @@
 package com.example.library.model;
 
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-public class Loan implements Serializable {
-    private int id;
-    private int bookId;
-    private int memberId;
+@Entity
+@Table(name = "loans")
+public class Loan {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     private LocalDate loanDate;
+
     private LocalDate dueDate;
-    private LocalDate returnDate;
 
     public Loan() {
     }
 
-    public Loan(int id, int bookId, int memberId, LocalDate loanDate, LocalDate dueDate, LocalDate returnDate) {
-        this.id = id;
-        this.bookId = bookId;
-        this.memberId = memberId;
+    public Loan(Book book, Member member, LocalDate loanDate, LocalDate dueDate) {
+        this.book = book;
+        this.member = member;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
-        this.returnDate = returnDate;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
-    public int getMemberId() {
-        return memberId;
+    public Member getMember() {
+        return member;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public LocalDate getLoanDate() {
@@ -61,17 +77,5 @@ public class Loan implements Serializable {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public boolean isReturned() {
-        return returnDate != null;
     }
 }
